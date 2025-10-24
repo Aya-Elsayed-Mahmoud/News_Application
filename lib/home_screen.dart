@@ -1,70 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/app_theme.dart';
 import 'package:news_app/categories/categories_screen.dart';
-import 'package:news_app/settings/settings_screen.dart';
+import 'package:news_app/categories/category_details_screen.dart';
+import 'package:news_app/categories/category_model.dart';
 
-class HomeScreen extends StatelessWidget {
-  final String title;
-  final Widget body;
+import 'drawer/home_drawer.dart';
 
-  const HomeScreen({super.key, required this.title, required this.body});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Widget selectedScreen = const SizedBox();
+  CategoryModel? selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedScreen = CategoriesScreen(onCategorySelected: onCategorySelected);
+  }
+
+  void onDrawerItemSelected(Widget newScreen) {
+    setState(() {
+      selectedScreen = newScreen;
+    });
+    Navigator.pop(context);
+  }
+
+  void onCategorySelected(CategoryModel category) {
+    setState(() {
+      selectedCategory = category;
+      selectedScreen = CategoryDetailsScreen(category: category);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppTheme.primary,
-              ),
-              child: Text(
-                "News App!",
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: AppTheme.white,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.menu_outlined),
-              title: Text(
-                "Categories",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              onTap: () {
-                Navigator.pushReplacementNamed(
-                    context, CategoriesScreen.routeName);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text(
-                "Settings",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              onTap: () {
-                Navigator.pushReplacementNamed(
-                    context, SettingsScreen.routeName);
-              },
-            ),
-          ],
+        title: Text(
+          "News App",
+          style: Theme
+              .of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(color: AppTheme.white),
         ),
+        elevation: 0,
       ),
+      drawer: HomeDrawer(onItemSelected: onDrawerItemSelected,
+        onCategorySelected: onCategorySelected,),
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
-              image:DecorationImage(
-                  image: AssetImage( "assets/images/background.png"),
-              )
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          body
+          selectedScreen,
         ],
       ),
     );

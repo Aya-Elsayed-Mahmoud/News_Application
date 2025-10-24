@@ -3,31 +3,57 @@ import 'package:news_app/app_theme.dart';
 import 'package:news_app/categories/category_item.dart';
 import 'package:news_app/categories/category_model.dart';
 
-import '../home_screen.dart';
-
 class CategoriesScreen extends StatelessWidget {
   static const String routeName = "/";
 
+  CategoriesScreen({super.key, required this.onCategorySelected});
+
+  final void Function(CategoryModel category) onCategorySelected;
+
   final List<CategoryModel> categories = [
-    CategoryModel(title: "Sports", image: "assets/images/sports.png",color:AppTheme.blueGrey),
-    CategoryModel(title: "Politics", image: "assets/images/Politics.png",color:AppTheme.blueGrey),
-    CategoryModel(title: "science", image: "assets/images/science.png",color:AppTheme.blueGrey),
-    CategoryModel(title: "health", image: "assets/images/health.png",color:AppTheme.blueGrey),
-    CategoryModel(title: "environment", image: "assets/images/environment.png",color:AppTheme.blueGrey),
-    CategoryModel(title: "bussines", image: "assets/images/bussines.png",color:AppTheme.blueGrey),
+    CategoryModel(
+        id: "sports",
+        title: "Sports",
+        image: "assets/images/sports.png",
+        color: AppTheme.blueGrey),
+    CategoryModel(
+        id: "politics",
+        title: "Politics",
+        image: "assets/images/Politics.png",
+        color: AppTheme.blueGrey),
+    CategoryModel(
+        id: "science",
+        title: "Science",
+        image: "assets/images/science.png",
+        color: AppTheme.blueGrey),
+    CategoryModel(
+        id: "health",
+        title: "Health",
+        image: "assets/images/health.png",
+        color: AppTheme.blueGrey),
+    CategoryModel(
+        id: "environment",
+        title: "Environment",
+        image: "assets/images/environment.png",
+        color: AppTheme.blueGrey),
+    CategoryModel(
+        id: "business",
+        title: "Business",
+        image: "assets/images/bussines.png",
+        color: AppTheme.blueGrey),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return HomeScreen(
-      title: "News App!",
+    return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Padding(
         padding: const EdgeInsets.only(left: 16, top: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Pick your category                                       of interest",
+              "Pick your category of interest",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: AppTheme.blueGrey,
                 fontWeight: FontWeight.bold,
@@ -44,7 +70,13 @@ class CategoriesScreen extends StatelessWidget {
                 ),
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
-                  return CategoryItem(category: categories[index]);
+                  final category = categories[index];
+                  return GestureDetector(
+                    onTap: () {
+                      onCategorySelected(category);
+                    },
+                    child: CategoryItem(category: category),
+                  );
                 },
               ),
             ),
