@@ -4,6 +4,8 @@ import 'package:news_app/categories/categories_screen.dart';
 import 'package:news_app/categories/category_model.dart';
 import 'package:news_app/settings/settings_screen.dart';
 
+import '../l10n/app_localizations.dart';
+
 class HomeDrawer extends StatelessWidget {
   final Function(Widget) onItemSelected;
   final Function(CategoryModel) onCategorySelected;
@@ -16,42 +18,46 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final backgroundColor = isDark ? Colors.black : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+
     return Drawer(
+      backgroundColor: backgroundColor,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: AppTheme.primary),
+          DrawerHeader(
+            decoration: const BoxDecoration(color: AppTheme.primary),
             child: Text(
-              "News App!",
-              style: TextStyle(
+              "${t.appTitle}!",
+              style: const TextStyle(
                 color: AppTheme.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          GestureDetector(
+          ListTile(
+            leading: Icon(Icons.menu_outlined, color: textColor),
+            title: Text(
+              t.categories,
+              style: theme.textTheme.headlineSmall?.copyWith(color: textColor),
+            ),
             onTap: () => onItemSelected(
               CategoriesScreen(onCategorySelected: onCategorySelected),
             ),
-            child: ListTile(
-              leading: Icon(Icons.menu_outlined),
-              title: Text(
-                "Categories",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ),
           ),
-          GestureDetector(
-            onTap: () => onItemSelected(const SettingsScreen()),
-            child: ListTile(
-              leading: Icon(Icons.settings),
-              title: Text(
-                "Settings",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+          ListTile(
+            leading: Icon(Icons.settings, color: textColor),
+            title: Text(
+              t.settings,
+              style: theme.textTheme.headlineSmall?.copyWith(color: textColor),
             ),
+            onTap: () => onItemSelected(const SettingsScreen()),
           ),
         ],
       ),
