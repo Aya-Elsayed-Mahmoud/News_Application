@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void onCategorySelected(CategoryModel category) {
     setState(() {
       selectedCategory = category;
-      selectedScreen = CategoryDetailsScreen(category: category);
+      selectedScreen = CategoryDetailsScreen(categoryId: category.id);
     });
   }
 

@@ -11,33 +11,27 @@ class CategoriesScreen extends StatelessWidget {
   final void Function(CategoryModel category) onCategorySelected;
 
   final List<CategoryModel> categories = [
-    CategoryModel(
-        id: "sports",
+    CategoryModel(id: "sports",
         title: "Sports",
         image: "assets/images/sports.png",
         color: AppTheme.blueGrey),
-    CategoryModel(
-        id: "politics",
-        title: "Politics",
+    CategoryModel(id: "general",
+        title: "General",
         image: "assets/images/Politics.png",
         color: AppTheme.blueGrey),
-    CategoryModel(
-        id: "science",
+    CategoryModel(id: "science",
         title: "Science",
         image: "assets/images/science.png",
         color: AppTheme.blueGrey),
-    CategoryModel(
-        id: "health",
+    CategoryModel(id: "health",
         title: "Health",
         image: "assets/images/health.png",
         color: AppTheme.blueGrey),
-    CategoryModel(
-        id: "environment",
-        title: "Environment",
+    CategoryModel(id: "entertainment",
+        title: "Entertainment",
         image: "assets/images/environment.png",
         color: AppTheme.blueGrey),
-    CategoryModel(
-        id: "business",
+    CategoryModel(id: "business",
         title: "Business",
         image: "assets/images/bussines.png",
         color: AppTheme.blueGrey),

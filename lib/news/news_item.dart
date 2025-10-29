@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/models/news_response.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NewsItem extends StatelessWidget {
-  const NewsItem({super.key});
+  const NewsItem(this.news, {super.key});
+
+  final Article news;
 
   @override
   Widget build(BuildContext context) {
@@ -12,28 +15,53 @@ class NewsItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-            child: Image.asset(
-              'assets/images/_118109970_livreal.png',
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            child: Image.network(
+              news.urlToImage ?? 'assets/images/no-image.png',
               height: MediaQuery.of(context).size.height * 0.25,
               width: double.infinity,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  Image.asset(
+                    'assets/images/no-image.png',
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.25,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text('BBC news', style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 6),
+          Text(
+            news.source?.name ?? "Unknown Source",
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 4),
           Text(
-            "Why are football's biggest clubs starting a new tournament?",
+            news.title ?? "No Title Available",
             style: Theme.of(context).textTheme.titleSmall,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
+          const SizedBox(height: 4),
           Align(
             alignment: AlignmentDirectional.centerEnd,
             child: Text(
-              timeago.format(DateTime.now()),
-              style: Theme.of(context).textTheme.titleMedium,
+              timeago.format(news.publishedAt ?? DateTime.now()),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: Colors.grey[600]),
             ),
           ),
+          const Divider(thickness: 0.8),
         ],
       ),
     );
