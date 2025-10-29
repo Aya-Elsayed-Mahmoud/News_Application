@@ -5,9 +5,13 @@ import '../models/sources_response.dart';
 import '../news/news_list.dart';
 
 class SourcesTabs extends StatefulWidget {
-  const SourcesTabs(this.source, {super.key});
-
   final List<Source> source;
+  final String searchQuery;
+
+  const SourcesTabs(this.source, {
+    super.key,
+    required this.searchQuery,
+  });
 
   @override
   State<SourcesTabs> createState() => _SourcesTabsState();
@@ -36,14 +40,20 @@ class _SourcesTabsState extends State<SourcesTabs> {
                 .map(
                   (source) => TabItem(
                     isSelected:
-                        widget.source.indexOf(source) == selectedTabIndex,
+                    widget.source.indexOf(source) == selectedTabIndex,
                     source: source.name ?? "",
                   ),
-                )
+            )
                 .toList(),
           ),
         ),
-        Expanded(child: NewsList(widget.source[selectedTabIndex].id ?? "")),
+        Expanded(
+          child: NewsList(
+            sourceId: widget.source[selectedTabIndex].id ?? "",
+            searchQuery: widget.searchQuery,
+
+          ),
+        ),
       ],
     );
   }

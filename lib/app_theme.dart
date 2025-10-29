@@ -50,8 +50,41 @@ static const Color grey = Color(0xFF79828B);
       ),
     ),
 
+
   
 );
-
-
+static ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  scaffoldBackgroundColor: Colors.black,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: primary,
+    centerTitle: true,
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        bottom: Radius.circular(30),
+      ),
+    ),
+    iconTheme: IconThemeData(color: white),
+    titleTextStyle: TextStyle(
+      color: white,
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+  textTheme: const TextTheme(
+    headlineSmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: white,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w100,
+      color: Colors.white70,
+    ),
+  ),
+);
 }
+
+
