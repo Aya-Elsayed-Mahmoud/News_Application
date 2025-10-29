@@ -5,6 +5,7 @@ import 'package:news_app/categories/category_details_screen.dart';
 import 'package:news_app/categories/category_model.dart';
 
 import 'drawer/home_drawer.dart';
+import 'l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Widget selectedScreen = const SizedBox();
   CategoryModel? selectedCategory;
+  bool isSearching = false;
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -26,6 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void onDrawerItemSelected(Widget newScreen) {
     setState(() {
       selectedScreen = newScreen;
+      selectedCategory = null;
+      isSearching = false;
+      searchController.clear();
     });
     Navigator.pop(context);
   }
@@ -33,26 +39,75 @@ class _HomeScreenState extends State<HomeScreen> {
   void onCategorySelected(CategoryModel category) {
     setState(() {
       selectedCategory = category;
-      selectedScreen = CategoryDetailsScreen(category: category);
+      selectedScreen = CategoryDetailsScreen(
+        categoryId: category.id,
+        searchQuery: searchController.text,
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "News App",
+        title: isSearching
+            ? TextField(
+          controller: searchController,
+          autofocus: true,
+          onChanged: (value) {
+            setState(() {
+              if (selectedCategory != null) {
+                selectedScreen = CategoryDetailsScreen(
+                  categoryId: selectedCategory!.id,
+                  searchQuery: value,
+                );
+              }
+            });
+          },
+          decoration: InputDecoration(
+            hintText: t.searchHint,
+            border: InputBorder.none,
+            hintStyle: const TextStyle(color: Colors.white70),
+          ),
+          style: const TextStyle(color: Colors.white),
+        )
+            : Text(
+          selectedCategory?.title ?? t.appTitle,
           style: Theme
               .of(context)
               .textTheme
               .headlineSmall
               ?.copyWith(color: AppTheme.white),
         ),
-        elevation: 0,
+        actions: selectedCategory != null
+            ? [
+          IconButton(
+            icon: Icon(
+              isSearching ? Icons.close : Icons.search,
+              color: AppTheme.white,
+            ),
+            onPressed: () {
+              setState(() {
+                isSearching = !isSearching;
+                if (!isSearching) {
+                  searchController.clear();
+                  selectedScreen = CategoryDetailsScreen(
+                    categoryId: selectedCategory!.id,
+                    searchQuery: "",
+                  );
+                }
+              });
+            },
+          ),
+        ]
+            : [],
       ),
-      drawer: HomeDrawer(onItemSelected: onDrawerItemSelected,
-        onCategorySelected: onCategorySelected,),
+      drawer: HomeDrawer(
+        onItemSelected: onDrawerItemSelected,
+        onCategorySelected: onCategorySelected,
+      ),
       body: Stack(
         children: [
           Container(

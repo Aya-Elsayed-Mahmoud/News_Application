@@ -1,0 +1,17 @@
+{
+  "appTitle": "تطبيق الأخبار",
+  "categories": "التصنيفات",
+  "settings": "الإعدادات",
+  "pickCategory": "اختر التصنيف الذي تهتم به!",
+  "searchHint": "ابحث في الأخبار...",
+  "sports": "رياضة",
+  "general": "عام",
+  "science": "علوم",
+  "health": "صحة",
+  "entertainment": "ترفيه",
+  "business": "أعمال",
+  "language": "اللغة",
+  "darkMode": "الوضع الداكن",
+  "english": "الإنجليزية",
+  "arabic": "العربية"
+}

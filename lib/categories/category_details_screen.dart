@@ -1,54 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/categories/category_model.dart';
-import 'package:news_app/news/news_item.dart';
-import 'package:news_app/tabs/tab_item.dart';
+import 'package:news_app/api/api_service.dart';
+import 'package:news_app/tabs/sources_tabs.dart';
+import 'package:news_app/widgets/errror_indicator.dart';
+import 'package:news_app/widgets/loading_indicator.dart';
+
+import '../l10n/app_localizations.dart';
 
 class CategoryDetailsScreen extends StatefulWidget {
-  final CategoryModel category;
+  final String categoryId;
+  final String? searchQuery;
 
-  const CategoryDetailsScreen({super.key, required this.category});
+  const CategoryDetailsScreen({
+    super.key,
+    required this.categoryId,
+    this.searchQuery,
+  });
 
   @override
   State<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
 }
 
 class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
-  int selectedTabIndex = 0;
-  final sources = List.generate(10, (index) => "source$index");
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DefaultTabController(
-          length: sources.length,
-          child: TabBar(
-              tabAlignment: TabAlignment.start,
-              isScrollable: true,
-              indicatorColor: Colors.transparent,
-              dividerColor: Colors.transparent,
-              onTap: (index) {
-                setState(() {
-                  selectedTabIndex = index;
-                });
-              },
-              tabs: sources.map(
+    final t = AppLocalizations.of(context)!;
 
-                      (source) =>
-                      TabItem(
-                          isSelected: sources.indexOf(source) ==
-                              selectedTabIndex,
-                          source: source
-                      )
-              ).toList()
-          ),
-        ),
-        Expanded(child:
-        ListView.builder(
-          itemBuilder: (_, index) =>
-          const NewsItem(),
-          itemCount: 10,))
-      ],
+    return FutureBuilder(
+      future: APIService.getSources(widget.categoryId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingIndicator();
+        } else if (snapshot.hasError || snapshot.data?.status != "ok") {
+          return const ErrrorIndicator();
+        } else {
+          final sources = snapshot.data?.sources ?? [];
+          return SourcesTabs(
+            sources,
+            searchQuery: widget.searchQuery ?? "",
+          );
+        }
+      },
     );
   }
 }

@@ -1,0 +1,17 @@
+{
+  "appTitle": "News App",
+  "categories": "Categories",
+  "settings": "Settings",
+  "pickCategory": "Pick your category of interest !",
+  "searchHint": "Search news...",
+  "sports": "Sports",
+  "general": "General",
+  "science": "Science",
+  "health": "Health",
+  "entertainment": "Entertainment",
+  "business": "Business",
+  "language": "Language",
+  "darkMode": "Dark Mode",
+  "english": "English",
+  "arabic": "Arabic"
+}
